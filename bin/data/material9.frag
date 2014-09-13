@@ -39,7 +39,7 @@ void main(void)
 	dir.xy*=rot2;
 	
 	vec3 from=vec3(0.,0.,0.);
-	from+=vec3((tan(.05),.15,-2.));
+	//from+=vec3((tan(.05),.15,-2.));
 	
 	from.xz*=rot1;
 	from.xy*=rot2;

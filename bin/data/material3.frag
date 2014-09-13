@@ -28,7 +28,7 @@ void main(void)
 
 	float m =  .1*t/6.283;
 	float my = .5*pow(.5*(1.-cos(.1*t)),3.);
-	int MODE = 0;
+	int MODE = 2;
 	float fMODE = (1.-cos(6.283*m))/2.;
 
 	const int R = 1;

@@ -8,48 +8,103 @@ varying vec3 e;
 varying vec3 n;
 
 
-void main(void)
-{
-vec3 r = reflect( e, n );
+#define SQRT2	1.41421356237
+#define SQRT3	1.73205080757
+
+#define SIZE 		15
+#define HASH_MAGNITUDE	(6.0 / (SQRT2 + 1.0) - 1.0) // Perfect if: HASH_MAGNITUDE < 2 * (KERNEL + 1) / (SQRT2 + 1) - 1
+#define KERNEL		2 // Perfect if: KERNEL >= floor ((HASH_MAGNITUDE + 1) * (SQRT2 + 1) / 2)
+
+#define BORDER
+//#define CENTER
+#define DISTANCE
+#define STRIPS
+#define HEXAGONAL
+
+float hash (in int index) {
+	float x = float (index);
+	return HASH_MAGNITUDE * 0.5 * sin (sin (x) * x + sin (x * x) * time);
+}
+
+vec2 pointInCell (in ivec2 cell) {
+	int index = cell.x + cell.y * SIZE;
+	vec2 point = vec2 (cell);
+	#ifdef HEXAGONAL
+	point.x += fract (point.y * 0.5) - 0.25;
+	#endif
+	return point + vec2 (hash (index), hash (index + 1)) * (0.5 + 0.5 * sin (time * 0.5));
+}
+
+void main () {
+//	vec2 p = float (SIZE) * (gl_FragCoord.xy - 0.5 * iResolution.xy) / iResolution.y;
+
+	vec3 r = reflect( e, n );
         r = e - 2. * dot( n, e ) * n;
         float m = 2. * sqrt( pow( r.x, 2. ) + pow( r.y, 2. ) + pow( r.z + 1., 2. ) );
-        vec2 p = r.xy / m + .5;
+        vec2 p = float (SIZE) *r.xy / m + .5;
 
-	vec2 lightPos = vec2(
-		(1.2 + sin(time)) * 0.4 * p.x,
-		(1.2 + cos(time)) * 0.4 * p.y
-	);
-	float bumpStrength = 16.0;
-	float bumpRadius1 = 0.1; 
-	float bumpRadius2 = 0.25; 
-	float lightStrength = 1.6;
-	float lightRadius = 0.7;
-	float refDist = 1.2 * p.x / 500.0;
-		
-	
-	vec2 vecToLight = gl_FragCoord.xy - lightPos;
-	float distToLight = length(vecToLight.xy / p.xy);
-	vec2 dirToLight = normalize(vecToLight);
-	vec2 curPos = gl_FragCoord.xy / p.xy;
-	vec2 refPos = curPos.xy - (refDist * dirToLight.xy / p.xy);
-	
-	vec4 curSample = texture2D(texture, curPos);
-	vec4 refSample = texture2D(texture, refPos);
-	
-	float curLumin = (curSample.x + curSample.y + curSample.z) * 0.33;
-	float refLumin = (refSample.x + refSample.y + refSample.z) * 0.33;
-	
-	float directionBrightness =
-		lightStrength - 
-		(
-			step(bumpRadius1, distToLight) * 
-			clamp((distToLight - bumpRadius1) / (bumpRadius2 - bumpRadius1), 0.0, 1.0) *
-			step(curLumin, refLumin) * 
-			clamp((refLumin - curLumin) * bumpStrength, 0.0, 1.0)
-		);
-	
-	float distanceBrightness = 1.0 - (distToLight / lightRadius);
-	
-	gl_FragColor.xyz = directionBrightness * distanceBrightness * curSample.xyz;
-	gl_FragColor.w = curSample.w;
+
+	#ifdef HEXAGONAL
+	p.y /= SQRT3 * 0.5;
+	#endif
+	ivec2 pCell = ivec2 (floor (p + 0.5));
+
+	float dMin = HASH_MAGNITUDE + 1.0;
+	vec2 pqMin;
+	ivec2 minCell;
+	for (int y = -KERNEL; y <= KERNEL; ++y) {
+		for (int x = -KERNEL; x <= KERNEL; ++x) {
+			ivec2 qCell = pCell + ivec2 (x, y);
+			vec2 pq = pointInCell (qCell) - p;
+			#ifdef HEXAGONAL
+			pq.y *= SQRT3 * 0.5;
+			#endif
+			float d = dot (pq, pq);
+			if (d < dMin) {
+				dMin = d;
+				pqMin = pq;
+				minCell = qCell;
+			}
+		}
+	}
+	int col = minCell.x + minCell.y * SIZE;
+	vec4 color = 0.6 + vec4 (hash (col), hash (col + 1), hash (col + 2), 0.0) * 0.8 / HASH_MAGNITUDE;
+
+	#ifdef CENTER
+	dMin = sqrt (dMin);
+	#else
+	dMin = HASH_MAGNITUDE + 1.0;
+	#endif
+
+	#ifdef BORDER
+	for (int y = -KERNEL; y <= KERNEL; ++y) {
+		for (int x = -KERNEL; x <= KERNEL; ++x) {
+			ivec2 qCell = pCell + ivec2 (x, y);
+			if (qCell != minCell) {
+				vec2 pq = pointInCell (qCell) - p;
+				#ifdef HEXAGONAL
+				pq.y *= SQRT3 * 0.5;
+				#endif
+				dMin = min (dMin, dot (0.5 * (pqMin + pq), normalize (pq - pqMin)));
+			}
+		}
+	}
+	#endif
+
+	color *= smoothstep (0.02, 0.1, dMin);
+
+	#ifdef DISTANCE
+	color *= 0.9 + 0.1 * sin (dMin * 40.0);
+	#endif
+
+	#ifdef STRIPS
+	float strip = float (col);
+	float stripCos = cos (strip);
+	float stripSin = sin (strip);
+	strip = mix (1.0, sin (40.0 * (pqMin.x * stripCos - pqMin.y * stripSin)), mod (strip * 0.5, 2.0));
+	strip *= sin (40.0 * (pqMin.x * stripSin + pqMin.y * stripCos));
+	color *= 0.8 + 0.2 * strip;
+	#endif
+
+	gl_FragColor = color;
 }
