@@ -25,13 +25,12 @@ https://github.com/kashimAstro/ofxSSAOFake
 <br>SSAO integrated
 <br>dof integrated
 <br>add specific materials
-
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/1.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/2.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/3.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/4.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/5.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/6.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/7.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/8.png)
-![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/9.png)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/1.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/2.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/3.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/4.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/5.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/6.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/7.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/8.jpg)
+![alt tag](https://github.com/kashimAstro/ofxGLSLMaterial/blob/master/9.jpg)
