@@ -17,7 +17,7 @@ Were added:
 And added a system for the (Screen space ambient occlusion)
 but at the moment is a bit worse, find a separate addons for now here:
 
-<br><br>
+<br>
 https://github.com/kashimAstro/ofxSSAOFake
 
 <br>Future work:
