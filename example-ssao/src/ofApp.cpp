@@ -14,7 +14,12 @@ void ofApp::setup(){
     materiale.initMaterial(12,materiale.GENERIC,imgcapsule,"");
 
     ofDisableArbTex();
-    fboscene.allocate(w,h);
+    ofFbo::Settings settings;
+    settings.numSamples = 8;
+    settings.useDepth = true;
+    settings.width = w;
+    settings.height = h;
+    fboscene.allocate(settings);
 
     gui.setup();
     gui.add(ssaoAlpha.set("alpha ssao",0.f,0.f,1.f));
@@ -36,7 +41,7 @@ void ofApp::update(){
    
     fboscene.begin();
     ofClear(100,100,100,255);
-    bg.draw(-100,-220);
+    bg.draw(0,0,w,h);
 
     /* shadow fake */
     ofPushMatrix();
