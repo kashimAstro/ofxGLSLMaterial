@@ -14,13 +14,15 @@ class ofApp : public ofBaseApp {
 		ofxAssimpModelLoader model;
 		string imgcapsule;
 		ofFbo fboscene;
+		ofImage bg;
 		ofxPanel gui;
-		ofParameter<ofVec3f> ssaoConf;
+		ofParameter<float> ssaoNoise;
+		ofParameter<float> ssaoAlpha;
 
 		void setup();
 		void draw();
 		void update();
-void confSSAO(ofVec3f & value);
+		void confSSAO(float & value);
 		void keyPressed(int key);
 		ofxSSAOFake ssao;
 };
