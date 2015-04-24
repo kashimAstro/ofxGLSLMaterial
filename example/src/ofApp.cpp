@@ -9,7 +9,7 @@ void ofApp::setup(){
     imgcapsule="images/skin3.jpg";/* image double reflect */
     model.loadModel("models/alduin.obj",true);
 
-    materiale.initMaterial(0,materiale.GENERIC,imgcapsule,"",false);
+    materiale.initMaterial(0,materiale.GENERIC,imgcapsule,"");
     int numMatShader = materiale.getNumMaterial();
 
     gui.setup();
@@ -27,10 +27,6 @@ void ofApp::setup(){
     gui.add(normal_map.set("normal map",false));
 
     gui.add(bg.set("background",ofColor(10,10,140),ofColor(0,0),ofColor(255,255)));
-
-    gui.add(darkMatter.set("dark ssao",0.4f,0.f,1.f));
-    gui.add(noiseMatter.set("noise ssao",0.2f,0.f,1.f));
-
     gui.setPosition(ofPoint(255,155,0));
 
     selectIndex.addListener(this, &ofApp::selectMaterial);
@@ -38,41 +34,26 @@ void ofApp::setup(){
     light_reflect.addListener(this, &ofApp::lightRef);
     simple_reflect.addListener(this, &ofApp::simpleRef);
     normal_map.addListener(this, &ofApp::normalMap);
-
-    darkMatter.addListener(this, &ofApp::darkMatterConf);
-    noiseMatter.addListener(this, &ofApp::noiseMatterConf);
-
-    ao.init(w,h);
-    fbo_contenitore.allocate(w,h);
-
-}
-
-void ofApp::darkMatterConf(float & value){
-        ao.setDark(value);
-}
-
-void ofApp::noiseMatterConf(float & value){
-        ao.setNoiseMap(value,(ofGetFrameNum()/50.0));
 }
 
 void ofApp::doubleRef(bool & value){
-    materiale.initMaterial(0,materiale.REFLECT_3,imgcapsule,imgcapsule2,false);
+    materiale.initMaterial(0,materiale.REFLECT_3,imgcapsule,imgcapsule2);
 }
 
 void ofApp::lightRef(bool & value){
-    materiale.initMaterial(0,materiale.REFLECT_2,imgcapsule,"",false);
+    materiale.initMaterial(0,materiale.REFLECT_2,imgcapsule,"");
 }
 
 void ofApp::simpleRef(bool & value){
-    materiale.initMaterial(0,materiale.REFLECT_1,imgcapsule,"",false);
+    materiale.initMaterial(0,materiale.REFLECT_1,imgcapsule,"");
 }
 
 void ofApp::normalMap(bool & value){
-    materiale.initMaterial(0,materiale.NORMALMAP,"","",true);
+    materiale.initMaterial(0,materiale.NORMALMAP,"","");
 }
 
 void ofApp::selectMaterial(int & value){
-    materiale.initMaterial(value,materiale.GENERIC,imgcapsule,"",true);/*value da 1 a getNumMaterial()*/
+    materiale.initMaterial(value,materiale.GENERIC,imgcapsule,"");/*value da 1 a getNumMaterial()*/
 }
 
 void ofApp::update(){
@@ -94,7 +75,7 @@ void ofApp::draw(){
 	    cam.begin();
 	        model.drawFaces();
 	    cam.end();
-	materiale.end();
+    materiale.end();
 
     if(hide){
         materiale.drawPicker();

@@ -1,7 +1,6 @@
 #include "ofMain.h"
 #include "glsl.h"
 #include "colorPicker.h"
-#include "ssao.h"
 
 class ofxGLSLMaterial : public ofBaseApp {
 
@@ -23,30 +22,19 @@ class ofxGLSLMaterial : public ofBaseApp {
         bool simpleRefHide;
         bool lightRefHide;
         bool doubleRefHide;
-        bool ssaoLife;
 
         ofShader shader;
-        ofShader ssaoShader;
         ofCamera *camera;
-        ofFbo ssao;
         ofImage noise;
         colorPicker pick;
-        //SSAO ao;
 
         ofxGLSLMaterial(){ }
         ~ofxGLSLMaterial(){ }
 
-        void prepareShaderProgram(string vert, string frag, bool ssaoat=false){
+        void prepareShaderProgram(string vert, string frag){
                 shader.setupShaderFromSource(GL_VERTEX_SHADER, vert);
                 shader.setupShaderFromSource(GL_FRAGMENT_SHADER, frag);
                 shader.linkProgram();
-                /*if(ssaoat){
-                    ofEnableArbTex();
-                    //ao.init(ofGetScreenWidth(),ofGetScreenHeight());
-                    ssao.allocate(ofGetScreenWidth(),ofGetScreenHeight());
-                    ofLog()<<"SSAO fbo allocate!"<<endl;
-                    ssaoLife=true;
-                }*/
         }
 
         int getNumMaterial(){
@@ -74,13 +62,13 @@ class ofxGLSLMaterial : public ofBaseApp {
             return noise;
         }
 
-        void initMaterial(int index, MODE _m, string Aim, string Bim="", bool _ssao=false) {
+        void initMaterial(int index, MODE _m, string Aim, string Bim="") {
             prepareNoiseMap();
             pick.init();
 
             MODE m =_m;
             if( m == REFLECT_1 && Aim != ""){
-                prepareShaderProgram(g.getShaderReflectMaterial()[0], g.getShaderReflectMaterial()[1],_ssao);//0,1
+                prepareShaderProgram(g.getShaderReflectMaterial()[0], g.getShaderReflectMaterial()[1]);//0,1
                 ofDisableArbTex();
                 simpleRef.loadImage(Aim);
                 ofLog()<<"simple reflect";
@@ -89,7 +77,7 @@ class ofxGLSLMaterial : public ofBaseApp {
                 doubleRefHide=false;
             }
             if( m == REFLECT_3 && Aim != "" && Bim != "" ){
-                prepareShaderProgram(g.getShaderReflectMaterial()[2], g.getShaderReflectMaterial()[3],_ssao);//2,3
+                prepareShaderProgram(g.getShaderReflectMaterial()[2], g.getShaderReflectMaterial()[3]);//2,3
                 ofDisableArbTex();
                 doubleRefA.loadImage(Aim);
                 doubleRefB.loadImage(Bim);
@@ -99,7 +87,7 @@ class ofxGLSLMaterial : public ofBaseApp {
                 lightRefHide=false;
             }
             if( m == REFLECT_2 && Aim != ""){
-                prepareShaderProgram(g.getShaderReflectMaterial()[4], g.getShaderReflectMaterial()[5],_ssao);//4,5
+                prepareShaderProgram(g.getShaderReflectMaterial()[4], g.getShaderReflectMaterial()[5]);//4,5
                 ofDisableArbTex();
                 lightRef.loadImage(Aim);
                 ofLog()<<"light image reflect";
@@ -111,7 +99,7 @@ class ofxGLSLMaterial : public ofBaseApp {
             if( m == GENERIC && Aim != ""){
                 if(index==0)
                     index=1;
-                prepareShaderProgram(g.getShaderSimpleMaterial()[0], g.getShaderSimpleMaterial()[index],_ssao);//0,1
+                prepareShaderProgram(g.getShaderSimpleMaterial()[0], g.getShaderSimpleMaterial()[index]);//0,1
                 ofDisableArbTex();
                 simpleRef.loadImage(Aim);
                 simpleRefHide=true;
@@ -123,7 +111,7 @@ class ofxGLSLMaterial : public ofBaseApp {
             if( m == NORMALMAP ){
                 if(index==0)
                     index=1;
-                prepareShaderProgram(g.normalMap()[0], g.normalMap()[index],_ssao);//0,1
+                prepareShaderProgram(g.normalMap()[0], g.normalMap()[index]);//0,1
                 ofDisableArbTex();
                 simpleRefHide=false;
                 doubleRefHide=false;
@@ -147,12 +135,6 @@ class ofxGLSLMaterial : public ofBaseApp {
             if(noisep) {
                 prepareNoiseMap(150, 150, disturb);
             }
-            /*if(ssaoLife){
-                ssao.begin();
-                //ofEnableAlphaBlending();//
-                ofClear(255,0,0,0);
-
-            }*/
             shader.begin();
             if(doubleRefHide){
                 shader.setUniform3f("CameraPos",camera->getPosition().x, camera->getPosition().y, camera->getPosition().z);
@@ -174,35 +156,8 @@ class ofxGLSLMaterial : public ofBaseApp {
             /**/
        }
 
-       /*void darkMatter(float value){
-           ao.setDark(value);
-       }
-
-       void noiseMatter(float value){
-           ao.prepareNoiseMap(50,50,value);
-       }*/
-
        void end(){
             ofDisableDepthTest();
             shader.end();
-            /*if(ssaoLife){
-                //ofDisableAlphaBlending();//
-                ssao.end();
-                //ssao.draw(0,0);
-
-                ofPixels pix;
-                ssao.readToPixels(pix);
-                ofImage sc;
-                sc.setFromPixels(pix);
-                ao.setOutputScene(sc);
-
-                //glEnable(GL_BLEND);//
-                //glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);//
-                //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//
-                //glBlendEquation(GL_FUNC_ADD);//
-
-                ao.draw();
-                //glDisable(GL_BLEND);//
-            }*/
        }
 };
