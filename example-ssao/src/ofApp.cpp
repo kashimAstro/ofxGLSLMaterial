@@ -9,7 +9,7 @@ void ofApp::setup(){
 
     ssao.init(w,h);
     ssao.setDark(0.6f);
-    ssao.setNoiseMap(1.f,35);
+    ssao.setNoiseMap(0.f,0.13f);
 
     imgcapsule="images/skin2.jpg";/* image base shader */
     model.loadModel("models/wolf.dae",true);
@@ -19,6 +19,7 @@ void ofApp::setup(){
     fboscene.allocate(w,h);
     gui.setup();
     gui.add(ssaoConf.set("ssao conf",ofVec3f(0.6f,0.f,0.13f),ofVec3f(0.f),ofVec3f(1.f)));
+    gui.setPosition(ofVec3f(420,10,0));
     ssaoConf.addListener(this,&ofApp::confSSAO);
 }
 
@@ -33,9 +34,9 @@ void ofApp::update(){
     fboscene.begin();
     ofClear(100,100,100,255);
     materiale.begin(&cam,0.54f,0.f,false,0.f);
-	    cam.begin();
+		ofTranslate(w/2,h/2+250,0);
+		ofRotateY(90);
 	        model.drawFaces();
-	    cam.end();
     materiale.end();
     fboscene.end();
     ssao.setOutputScene(fboscene);
