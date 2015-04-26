@@ -71,7 +71,7 @@ void ofApp::draw(){
         time=ofGetElapsedTimef();
     }
 
-    materiale.begin(&cam,time,maxh,noisestop,disturbo);
+    materiale.begin(&cam,materiale.getColorPicker(),time,maxh,noisestop,disturbo);
 	    cam.begin();
 	        model.drawFaces();
 	    cam.end();

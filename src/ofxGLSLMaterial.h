@@ -130,7 +130,11 @@ class ofxGLSLMaterial : public ofBaseApp {
             pick.draw(ofPoint(0,0,0));
         }
 
-        void begin(ofCamera *cam, float times = ofGetElapsedTimef(), float xmax=0.f, bool noisep=false, int disturb=30) {
+	ofColor getColorPicker(){
+		return pick.getColor();
+	}
+
+        void begin(ofCamera *cam, ofColor _pik, float times = ofGetElapsedTimef(), float xmax=0.f, bool noisep=false, int disturb=30) {
             camera=cam;
             if(noisep) {
                 prepareNoiseMap(150, 150, disturb);
@@ -150,7 +154,7 @@ class ofxGLSLMaterial : public ofBaseApp {
                 shader.setUniformTexture("bumpmap",   noise.getTextureReference(),  2);
                 shader.setUniform1f("maxHeight",      xmax);
                 shader.setUniform1f("time",           times);
-                shader.setUniform3f("colors",         ofMap(pick.getColor().r,0,255,0.f,1.f),ofMap(pick.getColor().g,0,255,0.f,1.f),ofMap(pick.getColor().b,0,255,0.f,1.f));
+                shader.setUniform3f("colors",         ofMap(_pik.r,0,255,0.f,1.f),ofMap(_pik.g,0,255,0.f,1.f),ofMap(_pik.b,0,255,0.f,1.f));
             }
             ofEnableDepthTest();
             /**/

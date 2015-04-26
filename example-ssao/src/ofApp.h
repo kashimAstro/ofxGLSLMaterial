@@ -11,6 +11,10 @@ class ofApp : public ofBaseApp {
 		bool active;
 
 		ofxGLSLMaterial materiale;
+		ofxGLSLMaterial materiale1;
+		ofxGLSLMaterial materiale2;
+
+
 		ofxAssimpModelLoader model;
 		string imgcapsule;
 		ofFbo fboscene;
@@ -18,6 +22,11 @@ class ofApp : public ofBaseApp {
 		ofxPanel gui;
 		ofParameter<float> ssaoNoise;
 		ofParameter<float> ssaoAlpha;
+		ofParameter<float> speedAnim;
+
+		int counter = 1;
+		float animationPosition;
+
 
 		void setup();
 		void draw();
