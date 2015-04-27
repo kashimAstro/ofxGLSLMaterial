@@ -7,5 +7,4 @@ class glsl {
         vector<string> getShaderReflectMaterial();
         vector<string> getShaderSimpleMaterial();
         vector<string> normalMap();
-        vector<string> getSSAOFrameBuffer();
 };
