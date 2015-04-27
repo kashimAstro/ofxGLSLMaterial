@@ -20,6 +20,15 @@ but at the moment is a bit worse, find a separate addons for now here:
 <br>
 https://github.com/kashimAstro/ofxSSAOFake
 
+<br>
+However, when a council post processing more robust, like this:
+<br>
+https://github.com/neilmendoza/ofxPostProcessing
+<br>
+(example-postprocessing)
+
+
+
 <br>Future work:
 
 <br>SSAO integrated

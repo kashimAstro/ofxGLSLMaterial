@@ -20,7 +20,6 @@ class ofApp : public ofBaseApp {
 		ofFbo fboscene;
 		ofImage bg;
 		ofxPanel gui;
-		ofParameter<float> ssaoNoise;
 		ofParameter<float> ssaoAlpha;
 		ofParameter<float> speedAnim;
 
@@ -31,7 +30,6 @@ class ofApp : public ofBaseApp {
 		void setup();
 		void draw();
 		void update();
-		void confSSAO(float & value);
 		void keyPressed(int key);
 		ofxSSAOFake ssao;
 };

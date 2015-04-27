@@ -29,18 +29,11 @@ void ofApp::setup(){
 
     gui.setup();
     gui.add(ssaoAlpha.set("alpha ssao",0.15,0.,1.));
-    gui.add(ssaoNoise.set("ssao conf",0.14,0.,1.));
     gui.add(speedAnim.set("speed anim",20,1,100));
-
     gui.setPosition(ofVec3f(420,10,0));
-    ssaoNoise.addListener(this,&ofApp::confSSAO);
 
     bg.loadImage("images/img1.jpg");
-    ssao.setNoiseMap(0.f,0.13f);
-}
-
-void ofApp::confSSAO(float & value){
-    ssao.setNoiseMap(0.f,value);
+    ssao.setNoiseMap(0.f,0.22f);
 }
 
 void ofApp::update(){
@@ -58,26 +51,28 @@ void ofApp::update(){
 
     bg.draw(0,0,w,h);
 
+//  cam.begin();
     ofPushMatrix();
-    materiale.begin(&cam,materiale.getColorPicker(),ofGetElapsedTimef(),0.0f,true,0.f);
-		ofTranslate(w/2+300,h/2+400,-270);
+    materiale.begin(&cam,materiale.getColorPicker(),ofGetElapsedTimef(),0.0f,false,0.f);
+		ofTranslate(w/2+450,h/2+400,-270);
 	        model.drawFaces();
     materiale.end();
     ofPopMatrix();
 
     ofPushMatrix();
-    materiale1.begin(&cam,materiale.getColorPicker(),ofGetElapsedTimef(),0.4f,true,0.f);
-		ofTranslate(w/2-80,h/2+400,-270);
+    materiale1.begin(&cam,materiale.getColorPicker(),ofGetElapsedTimef(),1.25f,true,240.f);
+		ofTranslate(w/2+100,h/2+400,-270);
 	        model.drawFaces();
     materiale1.end();
     ofPopMatrix();
 
     ofPushMatrix();
-    materiale2.begin(&cam,materiale.getColorPicker(),ofGetElapsedTimef(),1.3f,true,0.f);
-		ofTranslate(w/2-500,h/2+400,-270);
+    materiale2.begin(&cam,materiale.getColorPicker(),ofGetElapsedTimef(),1.3f,false,0.f);
+		ofTranslate(w/2-300,h/2+400,-270);
 	        model.drawFaces();
     materiale2.end();
     ofPopMatrix();
+//  cam.end();
 
     fboscene.end();
     ssao.setOutputScene(fboscene);

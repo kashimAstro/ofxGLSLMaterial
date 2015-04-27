@@ -1,0 +1,4 @@
+ofxGLSLMaterial
+ofxGui
+ofxAssimpModelLoader
+ofxPostProcessing
