@@ -54,7 +54,7 @@ class ofxGLSLMaterial : public ofBaseApp {
                         noise.getPixels()[y*wn+x] = color;
                 }
             }
-            noise.reloadTexture();
+            noise.update();//reloadTexture();
             /* end noise */
         }
 
@@ -70,7 +70,7 @@ class ofxGLSLMaterial : public ofBaseApp {
             if( m == REFLECT_1 && Aim != ""){
                 prepareShaderProgram(g.getShaderReflectMaterial()[0], g.getShaderReflectMaterial()[1]);//0,1
                 ofDisableArbTex();
-                simpleRef.loadImage(Aim);
+                simpleRef.load(Aim);
                 ofLog()<<"simple reflect";
                 simpleRefHide=true;
                 lightRefHide=false;
@@ -79,8 +79,8 @@ class ofxGLSLMaterial : public ofBaseApp {
             if( m == REFLECT_3 && Aim != "" && Bim != "" ){
                 prepareShaderProgram(g.getShaderReflectMaterial()[2], g.getShaderReflectMaterial()[3]);//2,3
                 ofDisableArbTex();
-                doubleRefA.loadImage(Aim);
-                doubleRefB.loadImage(Bim);
+                doubleRefA.load(Aim);
+                doubleRefB.load(Bim);
                 ofLog()<<"double image reflect";
                 doubleRefHide=true;
                 simpleRefHide=false;
@@ -89,7 +89,7 @@ class ofxGLSLMaterial : public ofBaseApp {
             if( m == REFLECT_2 && Aim != ""){
                 prepareShaderProgram(g.getShaderReflectMaterial()[4], g.getShaderReflectMaterial()[5]);//4,5
                 ofDisableArbTex();
-                lightRef.loadImage(Aim);
+                lightRef.load(Aim);
                 ofLog()<<"light image reflect";
                 lightRefHide=true;
                 simpleRefHide=false;
@@ -101,7 +101,7 @@ class ofxGLSLMaterial : public ofBaseApp {
                     index=1;
                 prepareShaderProgram(g.getShaderSimpleMaterial()[0], g.getShaderSimpleMaterial()[index]);//0,1
                 ofDisableArbTex();
-                simpleRef.loadImage(Aim);
+                simpleRef.load(Aim);
                 simpleRefHide=true;
                 doubleRefHide=false;
                 lightRefHide=false;
@@ -143,15 +143,15 @@ class ofxGLSLMaterial : public ofBaseApp {
             if(doubleRefHide){
                 shader.setUniform3f("CameraPos",camera->getPosition().x, camera->getPosition().y, camera->getPosition().z);
                 shader.setUniformMatrix4f("ModelWorld4x4",camera->getLocalTransformMatrix());
-                shader.setUniformTexture("frontMap",  doubleRefA.getTextureReference(), 1);
-                shader.setUniformTexture("backMap",   doubleRefB.getTextureReference(), 2);
+                shader.setUniformTexture("frontMap",  doubleRefA.getTexture(), 1);
+                shader.setUniformTexture("backMap",   doubleRefB.getTexture(), 2);
             }
             else if(lightRefHide){
-                shader.setUniformTexture("texture",    lightRef.getTextureReference(),   1);
+                shader.setUniformTexture("texture",    lightRef.getTexture(),   1);
             }
             else if(simpleRefHide){
-                shader.setUniformTexture("texture",   simpleRef.getTextureReference(),  1);
-                shader.setUniformTexture("bumpmap",   noise.getTextureReference(),  2);
+                shader.setUniformTexture("texture",   simpleRef.getTexture(),  1);
+                shader.setUniformTexture("bumpmap",   noise.getTexture(),  2);
                 shader.setUniform1f("maxHeight",      xmax);
                 shader.setUniform1f("time",           times);
                 shader.setUniform3f("colors",         ofMap(_pik.r,0,255,0.f,1.f),ofMap(_pik.g,0,255,0.f,1.f),ofMap(_pik.b,0,255,0.f,1.f));

@@ -25,7 +25,7 @@ class colorPicker {
 		    p.setColor(x,y,ofColor::fromHsb(hue,sat,bri));
 	        }
 	    }
-	    p.reloadTexture();
+	    p.update();//reloadTexture();
 	    return p;
 	}
 
@@ -41,7 +41,7 @@ class colorPicker {
 
 		ofPushStyle();
 		   ofSetColor(colors.get());
-		   ofRect(0,colorPicker.height,colorPicker.width,40);
+		   ofRect(0,colorPicker.getHeight(),colorPicker.getWidth(),40);
 		ofPopStyle();
 
 		ofPushStyle();
@@ -56,9 +56,10 @@ class colorPicker {
 	}
 
 	void mpress(int x, int y){
-		unsigned char *pixels=colorPicker.getPixels();
-		if(x<=colorPicker.width+pos.x && y<=colorPicker.height+pos.y ){
-			int index = y*colorPicker.width*3 + x*3;
+		//unsigned char *pixels=colorPicker.getPixels();
+		unsigned char *pixels=colorPicker.getPixels().getData();
+		if(x<=colorPicker.getWidth()+pos.x && y<=colorPicker.getHeight()+pos.y ){
+			int index = y*colorPicker.getWidth()*3 + x*3;
 			int red = pixels[index];
 			int green = pixels[index+1];
 			int blue = pixels[index+2];
